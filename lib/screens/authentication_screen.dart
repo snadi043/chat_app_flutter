@@ -10,7 +10,22 @@ class AuthenticationScreen extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<AuthenticationScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   var _isLogin = true;
+  var _enteredEmail = '';
+  var _enteredPassword = '';
+
+  void _submit() {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      _formKey.currentState!.save();
+      print(_enteredEmail);
+      print(_enteredPassword);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,45 +47,64 @@ class _AuthenticationState extends State<AuthenticationScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
+                        key: _formKey,
                         child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            label: Text('E-mail address'),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          autocorrect: false,
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            label: Text('Password'),
-                          ),
-                          obscureText: true,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer),
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            child: Text(_isLogin ? 'Login' : 'Sign Up')),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(_isLogin
-                                ? 'Create an account'
-                                : 'Already have an account ')),
-                      ],
-                    )),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.contains('@')) {
+                                  return 'Please Enter a Valid E-mail address';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _enteredEmail = value!;
+                              },
+                              decoration: const InputDecoration(
+                                label: Text('E-mail address'),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              autocorrect: false,
+                            ),
+                            TextFormField(
+                              validator: (value) {
+                                if (value == null || value.trim().length < 6) {
+                                  return 'Password should be atleast 6 characters';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _enteredPassword = value!;
+                              },
+                              decoration: const InputDecoration(
+                                label: Text('Password'),
+                              ),
+                              obscureText: true,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer),
+                                onPressed: _submit,
+                                child: Text(_isLogin ? 'Login' : 'Sign Up')),
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isLogin = !_isLogin;
+                                  });
+                                },
+                                child: Text(_isLogin
+                                    ? 'Create an account'
+                                    : 'Already have an account ')),
+                          ],
+                        )),
                   ),
                 ))
           ],
