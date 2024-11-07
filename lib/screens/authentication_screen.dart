@@ -30,11 +30,17 @@ class _AuthenticationState extends State<AuthenticationScreen> {
     _formKey.currentState!.save();
 
     try {
-      final credential = await firebaseAuth.createUserWithEmailAndPassword(
-        email: _enteredEmail,
-        password: _enteredPassword,
-      );
-      print(credential);
+      if (_isLogin) {
+        final userCredentials = await firebaseAuth.signInWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+        print(userCredentials);
+      } else {
+        final credential = await firebaseAuth.createUserWithEmailAndPassword(
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+        print(credential);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
