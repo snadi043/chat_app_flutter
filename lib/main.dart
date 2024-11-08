@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import './firebase_options.dart';
 
 import 'package:chat_app/screens/authentication_screen.dart';
+import 'package:chat_app/screens/chat_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,14 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 63, 17, 177)),
       ),
-      home: const AuthenticationScreen(),
+      home: StreamBuilder(
+          stream: firebaseAuth.authStateChanges(),
+          builder: (ctx, stream) {
+            if (stream.hasData) {
+              return const ChatScreen();
+            }
+            return const AuthenticationScreen();
+          }),
     );
   }
 }
