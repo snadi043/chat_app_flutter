@@ -11,10 +11,12 @@ class ChatScreen extends StatelessWidget {
         title: const Text('Flutter Chat'),
         actions: [
           IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: const Icon(Icons.login))
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon:
+                Icon(Icons.login, color: Theme.of(context).colorScheme.primary),
+          )
         ],
       ),
       body: const Center(
