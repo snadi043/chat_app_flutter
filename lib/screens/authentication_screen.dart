@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat_app/widgets/user_image.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
 
@@ -78,6 +79,7 @@ class _AuthenticationState extends State<AuthenticationScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            if (!_isLogin) const UserImage(),
                             TextFormField(
                               validator: (value) {
                                 if (value == null ||
