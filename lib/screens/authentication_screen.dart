@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,11 +21,12 @@ class _AuthenticationState extends State<AuthenticationScreen> {
   var _isLogin = true;
   var _enteredEmail = '';
   var _enteredPassword = '';
+  File? _selectedImage;
 
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
 
-    if (!isValid) {
+    if (!isValid || !_isLogin && _selectedImage == null) {
       return;
     }
 
@@ -79,7 +81,12 @@ class _AuthenticationState extends State<AuthenticationScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (!_isLogin) const UserImage(),
+                            if (!_isLogin)
+                              UserImage(
+                                onSelectedImage: (pickedImage) {
+                                  _selectedImage = pickedImage;
+                                },
+                              ),
                             TextFormField(
                               validator: (value) {
                                 if (value == null ||
