@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chat_app/widgets/user_image.dart';
 
 final firebaseAuth = FirebaseAuth.instance;
@@ -55,7 +56,14 @@ class _AuthenticationState extends State<AuthenticationScreen> {
             .child('${userInputCredentials.user!.uid}.jpg');
         await storageRef.putFile(_selectedImage!);
         final imageUrl = await storageRef.getDownloadURL();
-        print(imageUrl);
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc('${userInputCredentials.user!.uid}')
+            .set({
+          'username': 'to be implemented',
+          'email': _enteredEmail,
+          'image': imageUrl
+        });
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
