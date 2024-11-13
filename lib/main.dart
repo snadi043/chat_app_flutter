@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+//Keep the import inorder to prevent further errors being created by the firebase SDK.
 import './firebase_options.dart';
 
 import 'package:chat_app/screens/authentication_screen.dart';
